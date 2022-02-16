@@ -2,13 +2,13 @@
 
 Add the capability of reading ID cards or other text of fixed formats in your web application with just a few lines of code.
 
-[![](https://img.shields.io/badge/Download-Offline%20SDK-orange)](https://www.dynamsoft.com/survey/dlr/?utm_source=guide&product=dlr&package=js)
+[![](https://img.shields.io/badge/Download-Offline%20SDK-orange)](https://www.dynamsoft.com/survey/dlr/?utm_source=github&product=dlr&package=js)
 
 Once integrated, your users can open your website in a browser, access their cameras, and read the intended text directly from the video input.
 
 In this guide, you will learn step by step on how to integrate this library into your website.
 
-[TEST THE LIBRARY](https://www.dynamsoft.com/survey/dlr/?utm_source=guide&product=dlr&package=js)
+[TEST THE LIBRARY](https://www.dynamsoft.com/survey/dlr/?utm_source=github&product=dlr&package=js)
 
 **Table of Contents**
 
@@ -24,7 +24,7 @@ In this guide, you will learn step by step on how to integrate this library into
 
 **Other resources**
 
-* [API reference](https://www.dynamsoft.com/label-recognition/programming/javascript/api-reference/?ver=latest&utm_source=guide&product=dlr&package=js)
+* [API reference](https://www.dynamsoft.com/label-recognition/programming/javascript/api-reference/?ver=latest&utm_source=github&product=dlr&package=js)
 
 ## Hello World - Simplest Implementation
 
@@ -97,10 +97,10 @@ If the text is decoded, an alert will pop up with the result text. At the same t
 
   + The library only scans a new frame when it has finished scanning the previous frame. The interval between two consecutive frames might not be enough time for the library to process the 1st frame (for 30 FPS, the interval is about 33 ms), therefore, not all frames are scanned.
 
-  + The library requires a license to work. However, when no license is specified in the code, Dynamsoft allows a [7-day free period](https://www.dynamsoft.com/license-server/docs/about/terms.html?ver=latest#public-trial-license?utm_source=guide&product=dlr&package=js) during which you can make initial evaluation of the library to decide whether or not you want to evaluate it further. If you do, you can [request a trial](#requesting-a-trial).
+  + The library requires a license to work. However, when no license is specified in the code, Dynamsoft allows a [7-day free period](https://www.dynamsoft.com/license-server/docs/about/terms.html?ver=latest#public-trial-license?utm_source=github&product=dlr&package=js) during which you can make initial evaluation of the library to decide whether or not you want to evaluate it further. If you do, you can [request a trial](#requesting-a-trial).
     > Network connection is required for the 7-day free license to work.
 
-If the test doesn't go as expected, you can check out the [FAQ](#faq) or [contact us](https://www.dynamsoft.com/company/contact/?utm_source=guide&product=dlr&package=js).
+If the test doesn't go as expected, you can check out the [FAQ](#faq) or [contact us](https://www.dynamsoft.com/company/contact/?utm_source=github&product=dlr&package=js).
 
 ## Building your own page
 
@@ -132,7 +132,7 @@ The following shows a few ways to download the library.
 
 * From the website
 
-  [Download the JavaScript Package](https://www.dynamsoft.com/survey/dlr/?utm_source=guide&product=dlr&package=js)
+  [Download the JavaScript Package](https://www.dynamsoft.com/survey/dlr/?utm_source=github&product=dlr&package=js)
 
   > NOTE that the package contains the library Dynamsoft Camera Enhancer
 
@@ -183,9 +183,9 @@ Dynamsoft.DLR.LabelRecognizer.initlicense("DLS2eyJvcmdhbml6YXRpb25JRCI6IjIwMDAwM
 *Note*:
 
 * By default, network connection is required for the license to work.
-* If nothing is specified, a [7-day free license](https://www.dynamsoft.com/license-server/docs/about/terms.html?ver=latest#public-trial-license?utm_source=guide&product=dlr&package=js) will be used by default which is the case in the above "hello world" example.
+* If nothing is specified, a [7-day free license](https://www.dynamsoft.com/license-server/docs/about/terms.html?ver=latest#public-trial-license?utm_source=github&product=dlr&package=js) will be used by default which is the case in the above "hello world" example.
 * The license is actually fetched during the creation of a `LabelRecognizer` instance.
-* If a public network connection is not available, you can choose to host a license server in your private network or apply for an offline license. [Contact us](https://www.dynamsoft.com/company/contact/?utm_source=guide&product=dlr&package=js) for more information.
+* If a public network connection is not available, you can choose to host a license server in your private network or apply for an offline license. [Contact us](https://www.dynamsoft.com/company/contact/?utm_source=github&product=dlr&package=js) for more information.
 
 #### Specify the location of the "engine" files
 
@@ -231,7 +231,7 @@ recognizer.cameraEnhancer = enhancer;
 
 #### Change the camera settings if necessary.
 
-In some cases, a different camera might be required instead of the default one. Also, a different resolution might work better. To change the camera or the resolution, we use the `CameraEnhancer` object. Learn more [here](https://www.dynamsoft.com/camera-enhancer/docs/programming/javascript/api-reference/camera-control.html?ver=latest&utm_source=guide&product=dlr&package=js).
+In some cases, a different camera might be required instead of the default one. Also, a different resolution might work better. To change the camera or the resolution, we use the `CameraEnhancer` object. Learn more [here](https://www.dynamsoft.com/camera-enhancer/docs/programming/javascript/api-reference/camera-control.html?ver=latest&utm_source=github&product=dlr&package=js).
 
 ```javascript
 // set which camera and what resolution to use
@@ -355,13 +355,13 @@ Interested to test it further? Read on to learn how to request a 30-day free tri
 
 ## Requesting A Trial
 
-If no license is specified, a [7-day free license](https://www.dynamsoft.com/license-server/docs/about/terms.html?ver=latest#public-trial-license?utm_source=guide&product=dlr&package=js) will be used by default. 
+If no license is specified, a [7-day free license](https://www.dynamsoft.com/license-server/docs/about/terms.html?ver=latest#public-trial-license?utm_source=github&product=dlr&package=js) will be used by default. 
 
 > Network connection is required for the 7-day free license to work.
 
-After that, if you want to evaluate the library further, you can [register for a Dynamsoft account](https://www.dynamsoft.com/api-common/Regist/Regist?utm_source=guide&product=dlr&package=js) (if you haven't already done so) and request a 30-day trial in the [customer portal](https://www.dynamsoft.com/customer/license/trialLicense?utm_source=guide&product=dlr&package=js).
+After that, if you want to evaluate the library further, you can [register for a Dynamsoft account](https://www.dynamsoft.com/api-common/Regist/Regist?utm_source=github&product=dlr&package=js) (if you haven't already done so) and request a 30-day trial in the [customer portal](https://www.dynamsoft.com/customer/license/trialLicense?utm_source=github&product=dlr&package=js).
 
-* If you like, you can also [contact our support team](https://www.dynamsoft.com/company/contact/?utm_source=guide&product=dlr&package=js) to get a trial license.
+* If you like, you can also [contact our support team](https://www.dynamsoft.com/company/contact/?utm_source=github&product=dlr&package=js) to get a trial license.
 
 ## System Requirements
 
@@ -373,7 +373,7 @@ This library requires the following features which are supported by all modern m
 
 * `MediaDevices`/`getUserMedia`
 
-  This API is only required for in-browser video streaming. If a browser does not support this API, the [Single Frame Mode](https://www.dynamsoft.com/label-recognition/programming/javascript/api-reference/ui.html?ver=latest&utm_source=guide&product=dlr&package=js#singleframemode) will be used automatically. If the API exists but doesn't work correctly, the Single Frame Mode can be used as an alternative way to access the camera.
+  This API is only required for in-browser video streaming. If a browser does not support this API, the [Single Frame Mode](https://www.dynamsoft.com/label-recognition/programming/javascript/api-reference/ui.html?ver=latest&utm_source=github&product=dlr&package=js#singleframemode) will be used automatically. If the API exists but doesn't work correctly, the Single Frame Mode can be used as an alternative way to access the camera.
 
 The following table is a list of supported browsers based on the above requirements:
 
