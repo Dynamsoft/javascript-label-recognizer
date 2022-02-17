@@ -43,7 +43,7 @@ export default class LabelRecognizer {
      * ```
      * For convenience, you can set `license` in `script` tag instead.
      * ```html
-     * <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.0/dist/dlr.js" data-license="LICENSE"></script>
+     * <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.1/dist/dlr.js" data-license="LICENSE"></script>
      * ```
      */
     static initLicense(keys: string): void;
@@ -78,7 +78,7 @@ export default class LabelRecognizer {
      * The SDK will try to automatically explore the engine location.
      * If the auto-explored engine location is not accurate, manually specify the engine location.
      * ```js
-     * Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.0/dist/";
+     * Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.1/dist/";
      * await Dynamsoft.DLR.LabelRecognizer.loadWasm();
      * ```
     */
@@ -395,7 +395,7 @@ export default class LabelRecognizer {
      * @param source
      * @category Recognize
      */
-    recognize(source: Blob | Buffer | ArrayBuffer | Uint8Array | Uint8ClampedArray | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | string, modelName?: string): Promise<DLRResult[]>;
+    recognize(source: Blob | Buffer | ArrayBuffer | Uint8Array | Uint8ClampedArray | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | string, config?: any): Promise<DLRResult[]>;
     /**
      * The recognizing method can accept base64 with or without mime.
      * e.g. `data:image/jpg;base64,Xfjshekk....` or `Xfjshekk...`.
