@@ -37,7 +37,7 @@ yarn.lock
 /*.js
 /*.txt
 /.gitattributes
-# /.*ignore
+/.*ignore
 /DLR-*
 /src
 /Web.config
