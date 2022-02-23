@@ -1,4 +1,4 @@
-export default interface DLRPoint {
+export interface DLRPoint {
     x: number;
     y: number;
 }

@@ -1,10 +1,10 @@
-import DLRReferenceRegion from "./dlrreferenceregion";
-import DLRQuadrilateral from './dlrquadrilateral';
+import { DLRReferenceRegion } from "./dlrreferenceregion";
+import { DLRQuadrilateral } from './dlrquadrilateral';
 import { EnumDLRBinarizationMode } from "../enum/enumdlrbinarizationmode";
 /**
  * @see [RuntimeSettings]()//todo
  */
-export default interface DLRRuntimeSettings {
+export interface DLRRuntimeSettings {
     /**
      *
      */

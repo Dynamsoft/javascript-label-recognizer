@@ -1,4 +1,4 @@
-export default interface PlayCallbackInfo {
+export interface PlayCallbackInfo {
     height: number;
     width: number;
 }

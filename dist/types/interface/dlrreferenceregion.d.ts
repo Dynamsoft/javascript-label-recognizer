@@ -1,6 +1,6 @@
 import { EnumDLRLocalizationSourceType } from '../enum/enumdlrlocalizationsourcetype';
-import DLRQuadrilateral from './dlrquadrilateral';
-export default interface DLRReferenceRegion {
+import { DLRQuadrilateral } from './dlrquadrilateral';
+export interface DLRReferenceRegion {
     localizationSourceType: EnumDLRLocalizationSourceType;
     location: DLRQuadrilateral;
     regionMeasuredByPercentage: number;

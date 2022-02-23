@@ -1,11 +1,11 @@
 /// <reference types="node" />
-import DLRResult from "../interface/dlrresult";
-import DLRRuntimeSettings from "../interface/dlrruntimesettings";
+import { DLRResult } from "../interface/dlrresult";
+import { DLRRuntimeSettings } from "../interface/dlrruntimesettings";
 import { EnumDLRImagePixelFormat } from "../enum/enumdlrimagepixelformat";
-import LabelRecognizerException from "../interface/labelrecognizerexception";
-import DLRReferenceRegion from "../interface/dlrreferenceregion";
-import ScanSettings from '../interface/scanSettings';
-import PlayCallbackInfo from '../interface/playcallbackinfo';
+import { LabelRecognizerException } from "../interface/labelrecognizerexception";
+import { DLRReferenceRegion } from "../interface/dlrreferenceregion";
+import { ScanSettings } from '../interface/scanSettings';
+import { PlayCallbackInfo } from '../interface/playcallbackinfo';
 import { CameraEnhancer } from 'dynamsoft-camera-enhancer';
 /**
  * A class dedicated to image recognizing.
@@ -111,6 +111,18 @@ export default class LabelRecognizer {
     protected static _taskCallbackMap: Map<number, (body: any) => void>;
     private static _loadWasmStatus;
     private static _loadWasmCallbackArr;
+    /**
+     * Fire when resources loaded.
+     * @see [[onResourcesLoadStarted]]
+     * @param resourcesPath The path of resources
+     */
+    static onResourcesLoaded: (resourcesPath: string) => {};
+    /**
+     * Fire when resources start loading.
+     * @see [[onResourcesLoaded]]
+     * @param resourcesPath The path of resources
+     */
+    static onResourcesLoadStarted: (resourcesPath: string) => {};
     /** @ignore */
     _instanceID: number;
     /** @ignore */
@@ -136,7 +148,6 @@ export default class LabelRecognizer {
      */
     getOriginalImageInACanvas(): OffscreenCanvas | HTMLCanvasElement;
     /** @ignore */
-    onResourcesLoadComplete: () => {};
     protected bufferShared: Uint8Array | Uint8ClampedArray;
     protected _region?: DLRReferenceRegion;
     protected set region(value: null | DLRReferenceRegion);
@@ -219,7 +230,6 @@ export default class LabelRecognizer {
     private _clickIptSingleFrameMode;
     /** @ignore */
     intervalTime: number;
-    bOpenResultCheck: boolean;
     /** @ignore */
     private _intervalGetVideoFrame;
     private _loopReadVideoTimeoutId;
@@ -395,7 +405,7 @@ export default class LabelRecognizer {
      * @param source
      * @category Recognize
      */
-    recognize(source: Blob | Buffer | ArrayBuffer | Uint8Array | Uint8ClampedArray | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | string, config?: any): Promise<DLRResult[]>;
+    recognize(source: Blob | Buffer | ArrayBuffer | Uint8Array | Uint8ClampedArray | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | string | Object, config?: any): Promise<DLRResult[]>;
     /**
      * The recognizing method can accept base64 with or without mime.
      * e.g. `data:image/jpg;base64,Xfjshekk....` or `Xfjshekk...`.
@@ -468,8 +478,8 @@ export default class LabelRecognizer {
     private static isRegionNormalPreset;
     /**
      * Update runtime settings with a given struct, or a string of
-     * `numberLetter`, `number`, `letter`, `numberUppercase`, `cppdefault`,
-     * `video-numberLetter`, `video-number`, `video-letter`, `video-numberUppercase`, `video-cppdefault`,
+     * `numberLetter`, `number`, `letter`, `numberUppercase`, `cppdefault`, `VIN`, `VIN_NA`, `passportMRZ`, `visaMRZ`, `MRZ`
+     * `video-numberLetter`, `video-number`, `video-letter`, `video-numberUppercase`, `video-cppdefault`, `video-VIN`, `video-VIN_NA`, `video-passportMRZ`, `video-visaMRZ`, `video-MRZ`
      * to use preset settings for LabelRecognizer.
      * The default settings for LabelRecognizer is `cppdefault`.
      * ```js
@@ -478,7 +488,7 @@ export default class LabelRecognizer {
      * await recognizer.updateRuntimeSettings(settings);
      * ```
      * ```js
-     * await scanner.updateRuntimeSettings('video');
+     * await scanner.updateRuntimeSettings('video-numberLetter');
      * ```
      * @category Runtime Settings
      * @ignore
@@ -494,8 +504,8 @@ export default class LabelRecognizer {
     resetRuntimeSettings(): Promise<void>;
     /**
      * Update runtime settings with a given json, or a string of
-     * `numberLetter`, `number`, `letter`, `numberUppercase`, `cppdefault`, `VIN`, `VIN_NA`, `passportMRZ`, `visaMRZ_A`
-     * `video-numberLetter`, `video-number`, `video-letter`, `video-numberUppercase`, `video-cppdefault`, `video-VIN`, `video-VIN_NA`, `video-passportMRZ`, `video-visaMRZ_A`
+     * `numberLetter`, `number`, `letter`, `numberUppercase`, `cppdefault`, `VIN`, `VIN_NA`, `passportMRZ`, `visaMRZ`, `MRZ`
+     * `video-numberLetter`, `video-number`, `video-letter`, `video-numberUppercase`, `video-cppdefault`, `video-VIN`, `video-VIN_NA`, `video-passportMRZ`, `video-visaMRZ`, `video-MRZ`
      * to use preset settings for LabelRecognizer.
      * The default settings for LabelRecognizer is `cppdefault`.
      * ```js
@@ -508,7 +518,7 @@ export default class LabelRecognizer {
      * await recognizer.updateRuntimeSettingsFromString(JSON.stringify(settings));
      * ```
      * ```js
-     * await scanner.updateRuntimeSettingsFromString('video');
+     * await scanner.updateRuntimeSettingsFromString('video-numberLetter');
      * ```
      * @category Runtime Settings
      */
@@ -711,17 +721,11 @@ export default class LabelRecognizer {
      */
     private _checkValidMRP;
     /**
-     * check if the second row of visa mrz-a code is valid.
+     * check if the second row of visa mrz code is valid.
      * check digit only exits in second row in visa mrz.
      * @ignore
      */
-    private _checkValidMRV_A;
-    /**
-     * check if the second row of visa mrz-b code is valid.
-     * check digit only exits in second row in visa mrz.
-     * @ignore
-     */
-    private _checkValidMRV_B;
+    private _checkValidMRV;
     /** @ignore */
     _drawRegionsults(results?: DLRResult[]): void;
     /** @ignore */

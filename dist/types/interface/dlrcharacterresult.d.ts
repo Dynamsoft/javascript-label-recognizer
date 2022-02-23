@@ -1,5 +1,5 @@
-import DLRQuadrilateral from './dlrquadrilateral';
-export default interface DLRCharacterResult {
+import { DLRQuadrilateral } from './dlrquadrilateral';
+export interface DLRCharacterResult {
     characterH: string;
     characterM: string;
     characterL: string;

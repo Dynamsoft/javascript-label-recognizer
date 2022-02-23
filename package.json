@@ -24,7 +24,7 @@
   "license": "SEE LICENSE IN LICENSE.txt",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dynamsoft/javascript-label-recognizer.git"
+    "url": "https://github.com/Dynamsoft/label-recognizer-javascript.git"
   },
   "maintainers": [
     {
@@ -42,7 +42,7 @@
     "webassembly",
     "sdk",
     "javascript",
-    "typescript"
+    "web"
   ],
   "scripts": {
     "build:doc": "typedoc",

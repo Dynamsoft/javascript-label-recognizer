@@ -1,4 +1,4 @@
-export default interface ScanSettings {
+export interface ScanSettings {
     intervalTime?: number;
     duplicateForgetTime?: number;
 }
