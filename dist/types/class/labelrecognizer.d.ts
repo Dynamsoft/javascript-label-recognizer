@@ -1,5 +1,6 @@
 /// <reference types="node" />
 import { DLRResult } from "../interface/dlrresult";
+import { DLRLineResult } from "../interface/dlrlineresult";
 import { DLRRuntimeSettings } from "../interface/dlrruntimesettings";
 import { EnumDLRImagePixelFormat } from "../enum/enumdlrimagepixelformat";
 import { LabelRecognizerException } from "../interface/labelrecognizerexception";
@@ -43,7 +44,7 @@ export default class LabelRecognizer {
      * ```
      * For convenience, you can set `license` in `script` tag instead.
      * ```html
-     * <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.1/dist/dlr.js" data-license="LICENSE"></script>
+     * <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.2/dist/dlr.js" data-license="LICENSE"></script>
      * ```
      */
     static initLicense(keys: string): void;
@@ -78,7 +79,7 @@ export default class LabelRecognizer {
      * The SDK will try to automatically explore the engine location.
      * If the auto-explored engine location is not accurate, manually specify the engine location.
      * ```js
-     * Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.1/dist/";
+     * Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.2/dist/";
      * await Dynamsoft.DLR.LabelRecognizer.loadWasm();
      * ```
     */
@@ -112,17 +113,30 @@ export default class LabelRecognizer {
     private static _loadWasmStatus;
     private static _loadWasmCallbackArr;
     /**
-     * Fire when resources loaded.
-     * @see [[onResourcesLoadStarted]]
-     * @param resourcesPath The path of resources
-     */
-    static onResourcesLoaded: (resourcesPath: string) => {};
-    /**
      * Fire when resources start loading.
+     * @see [[onResourcesLoadProgress]]
      * @see [[onResourcesLoaded]]
      * @param resourcesPath The path of resources
      */
-    static onResourcesLoadStarted: (resourcesPath: string) => {};
+    static onResourcesLoadStarted: (resourcesPath?: string) => void;
+    /**
+     * Fire when resources progress.
+     * @see [[onResourcesLoadStarted]]
+     * @see [[onResourcesLoaded]]
+     * @param resourcesPath The path of resources
+     * @param progress The download progress of resources
+     */
+    static onResourcesLoadProgress: (resourcesPath?: string, progress?: {
+        loaded: number;
+        total: number;
+    }) => void;
+    /**
+     * Fire when resources loaded.
+     * @see [[onResourcesLoadStarted]]
+     * @see [[onResourcesLoadProgress]]
+     * @param resourcesPath The path of resources
+     */
+    static onResourcesLoaded: (resourcesPath?: string) => void;
     /** @ignore */
     _instanceID: number;
     /** @ignore */
@@ -671,7 +685,8 @@ export default class LabelRecognizer {
      * };
      * ```
      */
-    onUniqueRead?: (txt: string, result: DLRResult[]) => void;
+    onUniqueRead?: (txt: string, result: DLRLineResult) => void;
+    onMRZRead?: (txt: string, result: DLRLineResult[]) => void;
     /**
      * Get current scan settings of the LabelRecognizer object and saves it into a struct.
      * ```js

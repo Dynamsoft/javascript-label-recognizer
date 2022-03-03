@@ -8,7 +8,7 @@ Once integrated, your users can open your website in a browser, access their cam
 
 In this guide, you will learn step by step on how to integrate this library into your website.
 
-[TEST THE LIBRARY](https://www.dynamsoft.com/survey/dlr/?utm_source=github&product=dlr&package=js)
+[GET THE LIBRARY](https://www.dynamsoft.com/survey/dlr/?utm_source=github&product=dlr&package=js)
 
 **Table of Contents**
 
@@ -44,14 +44,21 @@ The complete code of the "Hello World" example is shown below
 <html>
 
 <body>
-<script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.1/dist/dlr.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@2.0.3/dist/dce.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.2/dist/dlr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@2.0.3/dist/dce.js"></script>
     <script>
         // initializes and uses the library
         (async () => {
             Dynamsoft.DCE.CameraEnhancer.defaultUIElementURL = Dynamsoft.DLR.LabelRecognizer.defaultUIElementURL;
             let cameraEnhancer = await Dynamsoft.DCE.CameraEnhancer.createInstance();
-
+            Dynamsoft.DLR.LabelRecognizer.onResourcesLoadStarted = (resourcePath) => {
+                console.log("Loading " + resourcePath);
+                // Show a visual cue that a model file is being 
+            };
+            Dynamsoft.DLR.LabelRecognizer.onResourcesLoaded = (resourcePath) => {
+                console.log("Finished loading " + resourcePath);
+                // Hide the visual cue
+            };
             let recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance({
                 runtimeSettings: "video-letter"
             });
@@ -78,15 +85,15 @@ The complete code of the "Hello World" example is shown below
   <!--<a target="_blank" href="https://github.com/Dynamsoft/barcode-reader-javascript-samples/blob/master/1.hello-world/1.minimum-code.html" title="Code in Github">
     <img src="https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/github.svg" alt="Code in Github" style="width:20px;height:20px;">
   </a>
-  &nbsp;-->
+  &nbsp; -->
   <a target="_blank" href="https://jsfiddle.net/DynamsoftTeam/b1w8vm0t/" title="Run via JSFiddle">
-    <img src="https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/jsfiddle.svg" alt="Run via JSFiddle" style="width:20px;height:20px;">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/jsfiddle.svg" alt="Run via JSFiddle" width="20" height="20" style="width:20px;height:20px;">
   </a>
-  <!--&nbsp;
+  <!--&nbsp; 
   <a target="_blank" href="https://demo.dynamsoft.com/Samples/DBR/JS/1.hello-world/1.minimum-code.html?utm_source=github" title="Run in Dynamsoft">
     <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/svgs/solid/circle-play.svg" alt="Run in Dynamsoft" style="width:20px;height:20px;">
   </a>
-  &nbsp;
+  &nbsp; 
   <a target="_blank" href="https://tst.dynamsoft.com/public/download/dbr/browser/code/helloworld-v8.8.7.zip?utm_source=github" title="Download from Dynamsoft">
     <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/svgs/solid/download.svg" alt="Download from Dynamsoft" style="width:20px;height:20px; ">
   </a>-->
@@ -125,6 +132,8 @@ If the test doesn't go as expected, you can check out the [FAQ](#faq) or [contac
 
 ## Building your own page
 
+We'll show all the steps required to build a web page for reading machine-readable zones (MRZ) on passports, visas, etc.
+
 ### Include the library
 
 #### Use a CDN
@@ -134,14 +143,14 @@ The simplest way to include the library is to use either the [jsDelivr](https://
 * jsDelivr
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.1/dist/dlr.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.2/dist/dlr.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@2.0.3/dist/dce.js"></script>
 ```
 
 * UNPKG  
 
 ```html
-<script src="https://unpkg.com/dynamsoft-label-recognizer@2.2.1/dist/dlr.js"></script>
+<script src="https://unpkg.com/dynamsoft-label-recognizer@2.2.2/dist/dlr.js"></script>
 <script src="https://unpkg.com/dynamsoft-camera-enhancer@2.0.3/dist/dce.js"></script>
 ```
 
@@ -167,15 +176,15 @@ $ yarn add dynamsoft-camera-enhancer
 * npm
 
 ```
-$ npm install dynamsoft-label-recognizer@2.2.1 --save
+$ npm install dynamsoft-label-recognizer@2.2.2 --save
 $ npm install dynamsoft-camera-enhancer@2.0.3 --save
 ```
 
 Depending on how you downloaded the library and where you put it. You can typically include it like this:
 
 ```html
-<script src="/dlr-js-2.2.1/dist/dlr.js"></script>
-<script src="/dlr-js-2.2.1/dce/dist/dce.js"></script>
+<script src="/dlr-js-2.2.2/dist/dlr.js"></script>
+<script src="/dlr-js-2.2.2/dce/dist/dce.js"></script>
 ```
 
 or
@@ -197,7 +206,7 @@ The library requires a license to work, use the API `license` to specify the lic
 
 ```javascript
 Dynamsoft.DLR.LabelRecognizer.license =
-  "YOUR-ORGANIZATION-ID or YOUR-HANDSHAKECODE or AN-OFFLINE-LICENSE or ANY-OTHER-TYPE-OF-SUPPORTED-LICENSE-STRING";
+    "YOUR-ORGANIZATION-ID or YOUR-HANDSHAKECODE or AN-OFFLINE-LICENSE or ANY-OTHER-TYPE-OF-SUPPORTED-LICENSE-STRING";
 ```
 
 *Note*:
@@ -208,13 +217,32 @@ Dynamsoft.DLR.LabelRecognizer.license =
 
 #### Specify the location of the "engine" files
 
-The "engine" files refer to *.worker.js, *.wasm.js and *.wasm, etc. which are loaded by the main library at runtime. This configuration option uses the API `engineResourcePath` and is often not required as these files usually are in the same location with the main library file (dlr.js). However, in cases where the engine files are not in the same location as the main library file (for example, with frameworks like Angular or React, dlr.js is compiled into another file), this configuration will be required.
+The "engine" files refer to *.worker.js, *.wasm.js and *.wasm, etc. which are loaded by the main library at runtime as well as model files (\*.data) which are necessary for the recognition of specific types of text. This configuration option uses the API `engineResourcePath` and is often not required as these files usually are in the same location with the main library file (dlr.js). However, in cases where the engine files are not in the same location as the main library file (for example, with frameworks like Angular or React, dlr.js is compiled into another file), this configuration will be required.
 
 The following code uses the jsDelivr CDN, feel free to change it to your own location of these files.
 
 ```javascript
-Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.1/dist/";
+Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.2/dist/";
 Dynamsoft.DCE.CameraEnhancer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@2.0.3/dist/";
+```
+
+#### Add a visual cue about the loading of a .data file
+
+The .data files are crucial for the recognition of certain types of text. For example, to read the MRZ zone on passports, the file MRZ.data must be loaded first. These .data files are loaded from the server on demand at runtime. At present, these files are quite large, for example, MRZ.data is about 10MB. Although these files are cached locally as soon as they are downloaded, loading them for the first time can be quite time-consuming. To make the process user-friendly, it's recommended to show a visual cue about the loading process to the user with the help of the APIs `onResourcesLoadStarted`, `onResourcesLoadProgress` and `onResourcesLoaded` :
+
+```js
+Dynamsoft.DLR.LabelRecognizer.onResourcesLoadStarted = (resourcePath) => {
+    console.log("Loading " + resourcePath);
+    // Show a visual cue that a model file is being 
+}
+Dynamsoft.DLR.LabelRecognizer.onResourcesLoadProgress = (resourcePath, progress) => {
+    console.log(resourcePath + "loading progress: " + progress.loaded + "/" + progress.total);
+    // Show the progress
+}
+Dynamsoft.DLR.LabelRecognizer.onResourcesLoaded = (resourcePath) => {
+    console.log("Finished loading " + resourcePath);
+    // Hide the visual cue
+}
 ```
 
 ### Interact with the library
@@ -226,9 +254,7 @@ To use the library, we first create a `LabelRecognizer` object.
 ```javascript
 let recognizer = null;
 try {
-    recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance({
-        runtimeSettings: "video-letter"
-    });
+    recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance();
 } catch (ex) {
     console.error(ex);
 }
@@ -254,9 +280,9 @@ In some cases, a different camera might be required instead of the default one. 
 
 ```javascript
 // set which camera and what resolution to use
-let allCameras = await enhancer.getAllCameras();
-await enhancer.selectCamera(allCameras[0]);
-await enhancer.setResolution(1280, 720);
+let allCameras = await cameraEnhancer.getAllCameras();
+await cameraEnhancer.selectCamera(allCameras[0]);
+await cameraEnhancer.setResolution(1280, 720);
 ```
 
 #### Set up the recognition process
@@ -308,8 +334,8 @@ Dynamsoft.DLR.LabelRecognizer.defaultUIElementURL = "THE-URL-TO-THE-FILE";
 ```
 
 ```javascript
-await enhancer.setUIElement(Dynamsoft.DLR.LabelRecognizer.defaultUIElementURL);
-document.getElementById('recognizerUI').appendChild(enhancer.getUIElement());
+await cameraEnhancer.setUIElement(Dynamsoft.DLR.LabelRecognizer.defaultUIElementURL);
+document.getElementById('recognizerUI').appendChild(cameraEnhancer.getUIElement());
 document.getElementsByClassName('dce-btn-close')[0].hidden = true; // Hide the close button
 ```
 
@@ -325,10 +351,9 @@ document.getElementsByClassName('dce-btn-close')[0].hidden = true; // Hide the c
     (async () => {
         let cameraEnhancer = await Dynamsoft.DCE.CameraEnhancer.createInstance();
         await cameraEnhancer.setUIElement(document.getElementById('div-video-container'));
-        let recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance({
-            runtimeSettings: "video-passportMRZ"
-        });
+        let recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance();
         recognizer.cameraEnhancer = cameraEnhancer;
+        await recognizer.updateRuntimeSettingsFromString("video-MRZ");
         recognizer.onFrameRead = results => {
             for (let result of results) {
                 for (let lineResult of result.lineResults) {
@@ -336,7 +361,7 @@ document.getElementsByClassName('dce-btn-close')[0].hidden = true; // Hide the c
                 }
             }
         };
-        recognizer.onUniqueRead = (txt, results) => {
+        recognizer.onMRZRead = (txt, results) => {
             alert(txt);
         };
         await recognizer.startScanning(true);
@@ -384,7 +409,7 @@ After that, if you want to evaluate the library further, you can [register for a
 
 This library requires the following features which are supported by all modern mainstream browsers:
 
-* `WebAssembly`, `Blob`, `URL`/`createObjectURL`,  `Web Workers`  
+* `WebAssembly`,   `Blob`,   `URL`/`createObjectURL`,  `Web Workers`  
 
   The above four features are required for the library to work.
 
