@@ -1,6 +1,6 @@
 {
   "name": "dynamsoft-label-recognizer",
-  "version": "2.2.2",
+  "version": "2.2.4",
   "description": "Dynamsoft Label Recognizer (DLR) is an SDK designed to recognize meaningful zonal text or symbols in an image (Label). Common scenarios include price tags in supermarkets, inventory labels in warehouses, VIN codes on car windshields, driver licenses, passports, visas, ID cards, etc.",
   "files": [
     "/dist",
@@ -54,9 +54,13 @@
     "@babel/core": "7.15.8",
     "@babel/preset-env": "7.15.8",
     "@rollup/plugin-babel": "5.3.0",
+    "@rollup/plugin-commonjs": "21.0.3",
+    "@rollup/plugin-node-resolve": "13.0.5",
     "@rollup/plugin-replace": "3.0.0",
     "@rollup/plugin-typescript": "8.3.0",
+    "@types/howler": "2.2.7",
     "@types/node": "16.11.2",
+    "dynamsoft-camera-enhancer": "2.3.2",
     "fs-extra": "8.1.0",
     "localforage": "1.10.0",
     "rollup": "2.58.0",
@@ -67,9 +71,11 @@
     "typescript": "4.3.5"
   },
   "peerDependencies": {
-    "dynamsoft-camera-enhancer": "2.0.3",
+    "dynamsoft-camera-enhancer": "2.3.2",
     "node-fetch": "2.6.1",
     "node-localstorage": "2.1.6"
   },
-  "dependencies": {}
+  "dependencies": {
+    "howler": "2.2.3"
+  }
 }
