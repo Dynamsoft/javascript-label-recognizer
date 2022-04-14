@@ -39,7 +39,7 @@ yarn.lock
 /*.txt
 /.gitattributes
 /.*ignore
-/DLR-*
+/dynamsoft-label-recognizer-js-*
 /src
 /Web.config
 /samples.url
