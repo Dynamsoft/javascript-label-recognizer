@@ -20,6 +20,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+*.map
 
 __pycache__
 ~~*

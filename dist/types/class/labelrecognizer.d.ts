@@ -4,10 +4,12 @@ import { DLRLineResult } from "../interface/dlrlineresult";
 import { DLRRuntimeSettings } from "../interface/dlrruntimesettings";
 import { EnumDLRImagePixelFormat } from "../enum/enumdlrimagepixelformat";
 import { LabelRecognizerException } from "../interface/labelrecognizerexception";
-import { DLRReferenceRegion } from "../interface/dlrreferenceregion";
 import { ScanSettings } from '../interface/scanSettings';
 import { PlayCallbackInfo } from '../interface/playcallbackinfo';
-import { CameraEnhancer } from 'dynamsoft-camera-enhancer';
+import { ImageSource } from '../interface/imagesource';
+import { DSImage } from '../interface/dsimage';
+import { CameraEnhancer, DCEFrame } from 'dynamsoft-camera-enhancer';
+import { Howl } from 'howler';
 /**
  * A class dedicated to image recognizing.
  * ```js
@@ -20,8 +22,8 @@ import { CameraEnhancer } from 'dynamsoft-camera-enhancer';
  * }
  * ```
  * ```js
- * let scanner = await Dynamsoft.DLR.LabelRecognizer.createInstance({runtimeSettings: 'video'});
- * scanner.onFrameRead = results => console.log(results);
+ * let scanner = await Dynamsoft.DLR.LabelRecognizer.createInstance({runtimeSettings: 'numberLetter'});
+ * scanner.onImageRead = results => console.log(results);
  * scanner.onUniqueRead = (txt, lineResult) => alert(txt);
  * scanner.startScanning(true);
  * ```
@@ -29,14 +31,12 @@ import { CameraEnhancer } from 'dynamsoft-camera-enhancer';
 export default class LabelRecognizer {
     private static _jsVersion;
     private static _jsEditVersion;
-    protected static _version: string;
+    private static _version;
     /**
      * Get the current version.
      */
     static getVersion(): string;
-    protected static _license: string;
-    static get license(): string;
-    static set license(keys: string);
+    private static _license;
     /**
      * Set the Dynamsoft Label Recognizer SDK license.
      * ```js
@@ -44,11 +44,13 @@ export default class LabelRecognizer {
      * ```
      * For convenience, you can set `license` in `script` tag instead.
      * ```html
-     * <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.2/dist/dlr.js" data-license="LICENSE"></script>
+     * <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.4/dist/dlr.js" data-license="LICENSE"></script>
      * ```
      */
+    static get license(): string;
+    static set license(keys: string);
     static initLicense(keys: string): void;
-    protected static _sessionPassword: string;
+    private static _sessionPassword;
     /**
      * Specify a password to protect the `online key` from abuse.
      * ```js
@@ -73,19 +75,19 @@ export default class LabelRecognizer {
     static detectEnvironment(): Promise<any>;
     /** @ignore */
     static _workerName: string;
-    protected static _engineResourcePath?: string;
+    private static _engineResourcePath?;
     static get engineResourcePath(): string;
     /**
      * The SDK will try to automatically explore the engine location.
      * If the auto-explored engine location is not accurate, manually specify the engine location.
      * ```js
-     * Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.2/dist/";
+     * Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.4/dist/";
      * await Dynamsoft.DLR.LabelRecognizer.loadWasm();
      * ```
     */
     static set engineResourcePath(value: string);
     /** @ignore */
-    protected static _licenseServer?: string[];
+    private static _licenseServer?;
     static get licenseServer(): string[] | string;
     /**
      * Specify the license server URL.
@@ -98,8 +100,10 @@ export default class LabelRecognizer {
     static set deviceFriendlyName(value: string);
     /** @ignore */
     static _isShowRelRecognizeTimeInResults: boolean;
+    private _maxCvsSideLength;
     /** @ignore */
-    _canvasMaxWH: number;
+    set maxCvsSideLength(value: number);
+    get maxCvsSideLength(): number;
     /** @ignore */
     static _onLog: (message: any) => void;
     /** @ignore */
@@ -108,8 +112,8 @@ export default class LabelRecognizer {
     static _bNeverShowDialog: boolean;
     /** @ignore */
     static _dlrWorker: Worker;
-    protected static _nextTaskID: number;
-    protected static _taskCallbackMap: Map<number, (body: any) => void>;
+    private static _nextTaskID;
+    private static _taskCallbackMap;
     private static _loadWasmStatus;
     private static _loadWasmCallbackArr;
     /**
@@ -138,9 +142,17 @@ export default class LabelRecognizer {
      */
     static onResourcesLoaded: (resourcesPath?: string) => void;
     /** @ignore */
+    static isImageSource(value: any): boolean;
+    /** @ignore */
+    static isDSImage(value: any): boolean;
+    /** @ignore */
+    static isCameraEnhancer(value: any): boolean;
+    /** @ignore */
+    static isDCEFrame(value: any): boolean;
+    /** @ignore */
     _instanceID: number;
     /** @ignore */
-    private bSaveOriCanvas;
+    private _ifSaveOriginalImageInACanvas;
     /**
      * Whether to save the original image into canvas.
      * ```js
@@ -151,27 +163,28 @@ export default class LabelRecognizer {
      */
     get ifSaveOriginalImageInACanvas(): boolean;
     set ifSaveOriginalImageInACanvas(value: boolean);
-    protected oriCanvas?: HTMLCanvasElement | OffscreenCanvas;
+    private oriCanvas?;
+    /** @ignore */
+    private oriCanvasData?;
     /**
      * The original canvas.
      * ```js
-     * recognizer.bSaveOriCanvas = true;
+     * recognizer.ifSaveOriginalImageInACanvas = true;
      * let results = await recognizer.recognize(source);
      * document.body.append(recognizer.oriCanvas);
      * ```
      */
-    getOriginalImageInACanvas(): OffscreenCanvas | HTMLCanvasElement;
-    /** @ignore */
-    protected bufferShared: Uint8Array | Uint8ClampedArray;
-    protected _region?: DLRReferenceRegion;
-    protected set region(value: null | DLRReferenceRegion);
-    protected get region(): null | DLRReferenceRegion;
+    getOriginalImageInACanvas(): any;
+    private canvas;
+    private _region?;
+    private set region(value);
+    private get region();
     /** @ignore */
     _timeStartRecognize: any;
     /** @ignore */
     _timeEnterInnerDLR: any;
-    protected recognizeRecords: any;
-    protected drawRegionsultRecords: any;
+    private recognizeRecords;
+    private drawRegionsultRecords;
     /**
      * @ignore A callback when wasm download success in browser environment.
      */
@@ -181,27 +194,27 @@ export default class LabelRecognizer {
      * @category Initialize and Destroy
      */
     static isWasmLoaded(): boolean;
-    protected bDestroyed: boolean;
+    private bDestroyed;
     /**
      * Indicates whether the instance has been destroyed.
      */
     isContextDestroyed(): boolean;
     /** @ignore */
-    protected _setWarnnedEx: Set<string>;
+    private _setWarnnedEx;
     /** @ignore */
-    protected static _lastErrorCode: number;
+    private static _lastErrorCode;
     /** @ignore */
     static get lastErrorCode(): number;
     /** @ignore */
-    protected static _lastErrorString: string;
+    private static _lastErrorString;
     /** @ignore */
     static get lastErrorString(): string;
     /** @ignore */
-    protected _lastErrorCode: number;
+    private _lastErrorCode;
     /** @ignore */
     get lastErrorCode(): number;
     /** @ignore */
-    protected _lastErrorString: string;
+    private _lastErrorString;
     /** @ignore */
     get lastErrorString(): string;
     /** @ignore */
@@ -221,27 +234,6 @@ export default class LabelRecognizer {
      * ```
      */
     static set defaultUIElementURL(value: string);
-    /**
-     * A mode not use video, get a frame from OS camera instead.
-     * ```js
-     * let scanner = await Dynamsoft.DLR.LabelRecognizer.createInstance();
-     * if(scanner.singleFrameMode){
-     *     // the browser does not provide webrtc API, dlrjs automatically use singleFrameMode instead
-     *     scanner.startScanning(true);
-     * }
-     * ```
-     */
-    get singleFrameMode(): boolean;
-    /**
-     * A mode not use video, get a frame from OS camera instead.
-     * ```js
-     * let scanner = await Dynamsoft.DLR.LabelRecognizer.createInstance();
-     * scanner.singleFrameMode = true; // use singleFrameMode anyway
-     * scanner.startScanning(true);
-     * ```
-     */
-    set singleFrameMode(value: boolean);
-    private _clickIptSingleFrameMode;
     /** @ignore */
     intervalTime: number;
     /** @ignore */
@@ -251,7 +243,7 @@ export default class LabelRecognizer {
     private array_getFrameTimeCost;
     /** @ignore */
     private array_decodeFrameTimeCost;
-    private _assertOpen;
+    private resultsOverlay;
     private _bPauseScan;
     private _intervalDetectVideoPause;
     /** @ignore */
@@ -273,18 +265,10 @@ export default class LabelRecognizer {
     private _minLetter;
     private _updateMinLtrSel;
     /** @ignore */
-    private _soundOnSuccessfullRead;
-    /**
-     * The sound to play when the scanner get successfull read.
-     */
-    get soundOnSuccessfullRead(): HTMLAudioElement;
-    /**
-     * The sound to play when the scanner get successfull read.
-     * ```js
-     * scanner.soundOnSuccessfullRead = new Audio("./pi.mp3");
-     * ```
-     */
-    set soundOnSuccessfullRead(value: HTMLAudioElement);
+    private _soundSource;
+    beepSound: Howl;
+    private get soundSource();
+    private set soundSource(value);
     /**
      * Whether to play sound when the scanner reads a character line successfully.
      * Default value is `false`, which does not play sound.
@@ -301,8 +285,8 @@ export default class LabelRecognizer {
      * ```
      * refer: `favicon bug` https://bugs.chromium.org/p/chromium/issues/detail?id=1069731&q=favicon&can=2
      */
-    bPlaySoundOnSuccessfulRead: (boolean | string);
-    get whenToPlaySoundforSuccessfulRead(): string;
+    private bPlaySoundOnSuccessfulRead;
+    private get whenToPlaySoundforSuccessfulRead();
     /**
      * Whether to vibrate when the scanner reads a character line successfully.
      * Default value is `false`, which does not vibrate.
@@ -319,7 +303,7 @@ export default class LabelRecognizer {
      * ```
      * refer: `favicon bug` https://bugs.chromium.org/p/chromium/issues/detail?id=1069731&q=favicon&can=2
      */
-    set whenToPlaySoundforSuccessfulRead(value: string);
+    private set whenToPlaySoundforSuccessfulRead(value);
     /**
      * Whether to vibrate when the scanner reads a barcode successfully.
      * Default value is `false`, which does not vibrate.
@@ -334,13 +318,13 @@ export default class LabelRecognizer {
      * ```
      * @ignore
      */
-    bVibrateOnSuccessfulRead: (boolean | string);
+    private bVibrateOnSuccessfulRead;
     /**
      * Get or set how long (ms) the vibration lasts.
      * @see [[whenToVibrateforSuccessfulRead]]
      */
-    vibrateDuration: number;
-    get whenToVibrateforSuccessfulRead(): string;
+    private vibrateDuration;
+    private get whenToVibrateforSuccessfulRead();
     /**
      * Whether to vibrate when the scanner reads a barcode successfully.
      * Default value is `never`, which does not vibrate.
@@ -354,19 +338,7 @@ export default class LabelRecognizer {
      * });
      * ```
      */
-    set whenToVibrateforSuccessfulRead(value: string);
-    /**
-     * @category UI
-     */
-    regionMaskFillStyle: string;
-    /**
-     * @category UI
-     */
-    regionMaskStrokeStyle: string;
-    /**
-     * @category UI
-     */
-    regionMaskLineWidth: number;
+    private set whenToVibrateforSuccessfulRead(value);
     /**
      * @category UI
      */
@@ -379,12 +351,22 @@ export default class LabelRecognizer {
      * @category UI
      */
     highlightLineWidth: number;
-    protected beingLazyDrawRegionsults: boolean;
+    private beingLazyDrawRegionsults;
     private currentSettingsTemplate;
-    private dce;
-    get cameraEnhancer(): CameraEnhancer;
-    set cameraEnhancer(value: CameraEnhancer);
-    private adjustDCESettings;
+    private _dce;
+    private set dce(value);
+    private get dce();
+    private dceConfig;
+    private imgSource;
+    private callbackCameraChange?;
+    private callbackResolutionChange?;
+    private callbackCameraClose?;
+    private callbackSingleFrameAcquired?;
+    private presetVideoTemplateRegion;
+    private isPresetRegion;
+    private updateDCEConfig;
+    private releaseDCEConfig;
+    setImageSource(imgSource: ImageSource | CameraEnhancer): void;
     private static _loadWasmErr;
     /**
      * Manually load and compile the decoding module. Used for preloading to avoid taking too long for lazy loading.
@@ -396,8 +378,9 @@ export default class LabelRecognizer {
      * @param content
      * @returns
      */
-    protected static showDialog(type: string, content: string): Promise<void>;
-    protected static createInstanceInWorker(): Promise<number>;
+    private static showDialog;
+    private static createInstanceInWorker;
+    private constructor();
     /**
      * Create a `LabelRecognizer` object.
      * ```
@@ -419,7 +402,7 @@ export default class LabelRecognizer {
      * @param source
      * @category Recognize
      */
-    recognize(source: Blob | Buffer | ArrayBuffer | Uint8Array | Uint8ClampedArray | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | string | Object, config?: any): Promise<DLRResult[]>;
+    recognize(source: Blob | Buffer | ArrayBuffer | Uint8Array | Uint8ClampedArray | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | string | DCEFrame | DSImage, config?: any): Promise<DLRResult[]>;
     /**
      * The recognizing method can accept base64 with or without mime.
      * e.g. `data:image/jpg;base64,Xfjshekk....` or `Xfjshekk...`.
@@ -502,7 +485,7 @@ export default class LabelRecognizer {
      * await recognizer.updateRuntimeSettings(settings);
      * ```
      * ```js
-     * await scanner.updateRuntimeSettings('video-numberLetter');
+     * await scanner.updateRuntimeSettings('numberLetter');
      * ```
      * @category Runtime Settings
      * @ignore
@@ -532,7 +515,7 @@ export default class LabelRecognizer {
      * await recognizer.updateRuntimeSettingsFromString(JSON.stringify(settings));
      * ```
      * ```js
-     * await scanner.updateRuntimeSettingsFromString('video-numberLetter');
+     * await scanner.updateRuntimeSettingsFromString('numberLetter');
      * ```
      * @category Runtime Settings
      */
@@ -611,12 +594,16 @@ export default class LabelRecognizer {
      * @ignore
      */
     _recognize_Video(video: HTMLVideoElement, config?: any): Promise<DLRResult[]>;
+    /**@ignore */
+    _recognize_DCEFrame(dceFrame: DCEFrame, config?: any): Promise<DLRResult[]>;
+    /**@ignore */
+    _recognize_DSImage(dsImage: DSImage, config?: any): Promise<DLRResult[]>;
     private _recognize_Base64;
     private _recognize_Url;
     private _recognize_FilePath;
     /** @ignore */
     static LabelRecognizerException(ag0: any, ag1: any): LabelRecognizerException;
-    protected _handleRetJsonString(objRet: any): any;
+    private _handleRetJsonString;
     /**
      * Sets the optional argument for a specified mode in Modes parameters.
      * ```js
@@ -640,13 +627,6 @@ export default class LabelRecognizer {
      * @category Runtime Settings
      */
     getModeArgument(modeName: string, index: number, argumentName: string): Promise<string>;
-    /**
-     * const dce = await Dynamsoft.DCE.createInstance();
-     * scanner.cameraEnhancer = dce;
-     * scanner.cameraEnhancer.open(true);
-     * console.log(await scanner.recognizeCurrentFrame());
-     */
-    recognizeCurrentFrame(): Promise<DLRResult[]>;
     private clearMapDecodeRecord;
     /** @ignore */
     _onCameraSelChange: () => void;
@@ -664,7 +644,7 @@ export default class LabelRecognizer {
      * The event that is triggered once a single frame has been scanned.
      * The results object contains all the results that the recognizer was able to recognize.
      * ```js
-     * scanner.onFrameRead = results => {
+     * scanner.onImageRead = results => {
      * for(let result of results){
      *     for(let lineResult of result.lineResults){
      *         console.log(lineResult.text);
@@ -673,7 +653,7 @@ export default class LabelRecognizer {
      * };
      * ```
      */
-    onFrameRead?: (results: DLRResult[]) => void;
+    onImageRead?: (results: DLRResult[]) => void;
     /**
      * This event is triggered when a not duplicated new character line is found.
      * txt holds the text result. result contains the actual line result, including the text result.
@@ -709,13 +689,6 @@ export default class LabelRecognizer {
      */
     updateScanSettings(settings: ScanSettings): Promise<void>;
     /** @ignore */
-    _show(): void;
-    /**
-     * Stop the video, and release the camera.
-     * @category Play and Pause
-     */
-    private stop;
-    /** @ignore */
     _cloneDecodeResults(results: any): any;
     /** @ignore */
     private _loopReadVideo;
@@ -741,11 +714,8 @@ export default class LabelRecognizer {
      * @ignore
      */
     private _checkValidMRV;
-    /** @ignore */
-    _drawRegionsults(results?: DLRResult[]): void;
-    /** @ignore */
-    _clearRegionsults(): void;
-    protected _tempSolutionStatus: string;
+    _drawResults(results: DLRResult[]): void;
+    private _tempSolutionStatus;
     /**
      * Bind UI, open the camera, start recognizing.
      * ```js
