@@ -36,7 +36,8 @@ yarn.lock
 /*.md
 /*.json
 /*.js
-/*.txt
+/version.txt
+/trykey.txt
 /.gitattributes
 /.*ignore
 /dynamsoft-label-recognizer-js-*
@@ -46,10 +47,10 @@ yarn.lock
 /samples
 /temp
 /public
+/original_model_files
 /dce
-/doc/api reference
 /README.html
 
 !bower.json
 !composer.json
-!package.js
+!package.json

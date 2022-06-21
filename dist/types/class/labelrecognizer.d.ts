@@ -44,7 +44,7 @@ export default class LabelRecognizer {
      * ```
      * For convenience, you can set `license` in `script` tag instead.
      * ```html
-     * <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.4/dist/dlr.js" data-license="LICENSE"></script>
+     * <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.10/dist/dlr.js" data-license="LICENSE"></script>
      * ```
      */
     static get license(): string;
@@ -81,7 +81,7 @@ export default class LabelRecognizer {
      * The SDK will try to automatically explore the engine location.
      * If the auto-explored engine location is not accurate, manually specify the engine location.
      * ```js
-     * Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.4/dist/";
+     * Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.10/dist/";
      * await Dynamsoft.DLR.LabelRecognizer.loadWasm();
      * ```
     */
@@ -100,10 +100,6 @@ export default class LabelRecognizer {
     static set deviceFriendlyName(value: string);
     /** @ignore */
     static _isShowRelRecognizeTimeInResults: boolean;
-    private _maxCvsSideLength;
-    /** @ignore */
-    set maxCvsSideLength(value: number);
-    get maxCvsSideLength(): number;
     /** @ignore */
     static _onLog: (message: any) => void;
     /** @ignore */
@@ -239,6 +235,7 @@ export default class LabelRecognizer {
     /** @ignore */
     private _intervalGetVideoFrame;
     private _loopReadVideoTimeoutId;
+    private _vinResultArrayTimeoutId;
     /** @ignore */
     private array_getFrameTimeCost;
     /** @ignore */
@@ -352,6 +349,7 @@ export default class LabelRecognizer {
      */
     highlightLineWidth: number;
     private beingLazyDrawRegionsults;
+    private _vinResultArray;
     private currentSettingsTemplate;
     private _dce;
     private set dce(value);
@@ -362,6 +360,10 @@ export default class LabelRecognizer {
     private callbackResolutionChange?;
     private callbackCameraClose?;
     private callbackSingleFrameAcquired?;
+    private _maxCvsSideLength;
+    /** @ignore */
+    set maxCvsSideLength(value: number);
+    get maxCvsSideLength(): number;
     private presetVideoTemplateRegion;
     private isPresetRegion;
     private updateDCEConfig;
@@ -459,6 +461,11 @@ export default class LabelRecognizer {
      * @category Recognize
      */
     recognizeBuffer(buffer: Uint8Array | Uint8ClampedArray | ArrayBuffer | Blob | Buffer, width: number, height: number, stride: number, format: EnumDLRImagePixelFormat, config?: any): Promise<any>;
+    /**
+     * Filter VIN code results by confidence
+     */
+    _filterVinResults(results: any): void;
+    _filterMrzResults(results: any): any;
     /** @ignore */
     _recognizeFileInMemory_Uint8Array(bytes: Uint8Array, config?: any): Promise<any>;
     /**
@@ -667,6 +674,7 @@ export default class LabelRecognizer {
      */
     onUniqueRead?: (txt: string, result: DLRLineResult) => void;
     onMRZRead?: (txt: string, result: DLRLineResult[]) => void;
+    onVINRead?: (txt: string) => void;
     /**
      * Get current scan settings of the LabelRecognizer object and saves it into a struct.
      * ```js
@@ -697,6 +705,7 @@ export default class LabelRecognizer {
      * @ignore
      */
     private _getVideoFrame;
+    _drawResults(results: DLRResult[]): void;
     /**
      * check if the vin code is valid
      * @ignore
@@ -714,7 +723,6 @@ export default class LabelRecognizer {
      * @ignore
      */
     private _checkValidMRV;
-    _drawResults(results: DLRResult[]): void;
     private _tempSolutionStatus;
     /**
      * Bind UI, open the camera, start recognizing.
