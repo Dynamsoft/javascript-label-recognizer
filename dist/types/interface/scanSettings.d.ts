@@ -9,5 +9,6 @@ export interface ScanSettings {
     soundOnSuccessfullRead?: string;
     whenToVibrateforSuccessfulRead?: string;
     vibrateDuration?: number;
+    captureAndRecognizeInParallel?: boolean;
 }
 //# sourceMappingURL=scanSettings.d.ts.map

@@ -9,7 +9,7 @@ import { PlayCallbackInfo } from '../interface/playcallbackinfo';
 import { ImageSource } from '../interface/imagesource';
 import { DSImage } from '../interface/dsimage';
 import { CameraEnhancer, DCEFrame } from 'dynamsoft-camera-enhancer';
-import { Howl } from 'howler';
+import { Howl } from 'dm-howler';
 /**
  * A class dedicated to image recognizing.
  * ```js
@@ -44,11 +44,11 @@ export default class LabelRecognizer {
      * ```
      * For convenience, you can set `license` in `script` tag instead.
      * ```html
-     * <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.10/dist/dlr.js" data-license="LICENSE"></script>
+     * <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.11/dist/dlr.js" data-license="LICENSE"></script>
      * ```
      */
     static get license(): string;
-    static set license(keys: string);
+    static set license(license: string);
     static initLicense(keys: string): void;
     private static _sessionPassword;
     /**
@@ -73,6 +73,7 @@ export default class LabelRecognizer {
      * Detect environment and get a report.
      */
     static detectEnvironment(): Promise<any>;
+    private static _pLoad;
     /** @ignore */
     static _workerName: string;
     private static _engineResourcePath?;
@@ -81,7 +82,7 @@ export default class LabelRecognizer {
      * The SDK will try to automatically explore the engine location.
      * If the auto-explored engine location is not accurate, manually specify the engine location.
      * ```js
-     * Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.10/dist/";
+     * Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.11/dist/";
      * await Dynamsoft.DLR.LabelRecognizer.loadWasm();
      * ```
     */
@@ -141,8 +142,6 @@ export default class LabelRecognizer {
     static isImageSource(value: any): boolean;
     /** @ignore */
     static isDSImage(value: any): boolean;
-    /** @ignore */
-    static isCameraEnhancer(value: any): boolean;
     /** @ignore */
     static isDCEFrame(value: any): boolean;
     /** @ignore */
@@ -215,16 +214,24 @@ export default class LabelRecognizer {
     get lastErrorString(): string;
     /** @ignore */
     _lastInnerDecodeDuration: number;
+    /** @ignore */
+    static recalculateResultLocation(results: any, sx: number, sy: number, sWidth: number, sHeight: number, dWidth: number, dHeight: number): void;
+    /**
+     * @deprecated
+     */
     private static _defaultUIElementURL;
+    /**
+     * @deprecated
+     */
     static get defaultUIElementURL(): string;
     /**
      * The url of the default scanner UI.
      * Can only be changed before `createInstance`.
      * ```js
-     * Dynamsoft.DBR.BarcodeScanner.defaultUIElementURL = "https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@8.8.0/dist/dbr.ui.html";
+     * Dynamsoft.DLR.LabelRecognizer.defaultUIElementURL = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.11/dist/dlr.ui.html";
      * let pScanner = null;
      * (async()=>{
-     *     let scanner = await (pScanner = pScanner || Dynamsoft.DBR.BarcodeScanner.createInstance());
+     *     let scanner = await (pScanner = pScanner || Dynamsoft.DLR.LabelRecognizer.createInstance());
      *     await scanner.startScanning(true);
      * })();
      * ```
@@ -240,9 +247,11 @@ export default class LabelRecognizer {
     private array_getFrameTimeCost;
     /** @ignore */
     private array_decodeFrameTimeCost;
-    private resultsOverlay;
+    private _dlrDrawingLayer;
+    private _arrPolygons;
     private _bPauseScan;
     private _intervalDetectVideoPause;
+    protected captureAndRecognizeInParallel: boolean;
     /** @ignore */
     _cvsDrawArea: HTMLCanvasElement;
     /** @ignore */
@@ -354,7 +363,8 @@ export default class LabelRecognizer {
     private _dce;
     private set dce(value);
     private get dce();
-    private dceConfig;
+    private _drawingItemNamespace;
+    private _dceControler;
     private imgSource;
     private callbackCameraChange?;
     private callbackResolutionChange?;
@@ -366,9 +376,9 @@ export default class LabelRecognizer {
     get maxCvsSideLength(): number;
     private presetVideoTemplateRegion;
     private isPresetRegion;
-    private updateDCEConfig;
-    private releaseDCEConfig;
-    setImageSource(imgSource: ImageSource | CameraEnhancer): void;
+    private _registerDCEControler;
+    private _logoutDCEControler;
+    setImageSource(imgSource: ImageSource | CameraEnhancer, options?: any): Promise<void>;
     private static _loadWasmErr;
     /**
      * Manually load and compile the decoding module. Used for preloading to avoid taking too long for lazy loading.
@@ -674,7 +684,7 @@ export default class LabelRecognizer {
      */
     onUniqueRead?: (txt: string, result: DLRLineResult) => void;
     onMRZRead?: (txt: string, result: DLRLineResult[]) => void;
-    onVINRead?: (txt: string) => void;
+    onVINRead?: (txt: string, result: DLRLineResult) => void;
     /**
      * Get current scan settings of the LabelRecognizer object and saves it into a struct.
      * ```js
@@ -705,7 +715,7 @@ export default class LabelRecognizer {
      * @ignore
      */
     private _getVideoFrame;
-    _drawResults(results: DLRResult[]): void;
+    _drawResults(results: any): void;
     /**
      * check if the vin code is valid
      * @ignore
@@ -745,7 +755,7 @@ export default class LabelRecognizer {
      * Pause the recognizing process.
      * @category Pause and Resume
      */
-    pauseScanning(): void;
+    pauseScanning(options?: any): void;
     /**
      * Resume the recognizing process.
      * @category Pause and Resume
