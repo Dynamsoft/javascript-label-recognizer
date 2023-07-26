@@ -1,0 +1,4 @@
+export interface DLRPoint{
+    x: number;
+    y: number;
+}

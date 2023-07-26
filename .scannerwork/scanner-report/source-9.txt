@@ -1,0 +1,16 @@
+/**
+* @enum DLRLocalizationSourceType
+*
+* Describes localization source type.
+*
+*/
+export enum EnumDLRLocalizationSourceType {
+    /**Define the reference region using the manually specified location.*/
+	LST_MANUAL_SPECIFICATION = 0x01,
+	
+	/**Define the reference region using the result(s) of region predetection process.*/
+	LST_PREDETECTED_REGION = 0x02,
+
+	/**Define the reference region using the barcode info.*/
+	LST_BARCODE = 0x04
+} 

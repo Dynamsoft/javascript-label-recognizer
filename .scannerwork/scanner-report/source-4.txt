@@ -1,0 +1,23 @@
+/**
+* @enum DLRBinarizationMode
+*
+* Describes the binarization mode.
+*
+*/
+export enum EnumDLRBinarizationMode {
+    /**Not supported yet. */
+	BM_AUTO = 0x01,
+
+	/**Binarizes the image based on the local block. Check @ref BM for available argument settings.*/
+	BM_LOCAL_BLOCK = 0x02,
+
+	/**Performs image binarization based on the given threshold. Check @ref BM for available argument settings.*/
+	BM_THRESHOLD = 0x04,
+
+	/**Reserved setting for binarization mode.*/
+
+    BM_REV = 0x80000000,
+
+    /**Skips the binarization. */
+	BM_SKIP = 0x00
+}

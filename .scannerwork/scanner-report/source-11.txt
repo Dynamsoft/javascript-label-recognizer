@@ -1,0 +1,19 @@
+/**
+* @enum DLRScaleUpMode
+*
+* Describes scale up mode.
+*
+*/
+export enum EnumDLRScaleUpMode {
+    /**Skip the scale-up process.*/
+	SUM_SKIP = 0x00,
+
+	/**The library chooses an interpolation method automatically to scale up.*/
+	SUM_AUTO = 0x01,
+
+	/**Scales up using the linear interpolation method.*/
+	SUM_LINEAR_INTERPOLATION = 0x02,
+
+	/**Scales up using the nearest-neighbour interpolation method.*/
+	SUM_NEAREST_NEIGHBOUR_INTERPOLATION = 0x04
+}

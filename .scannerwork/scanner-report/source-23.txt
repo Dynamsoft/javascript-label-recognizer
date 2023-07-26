@@ -1,0 +1,29 @@
+export interface ScanSettings{
+    //UIElement?: HTMLElement;
+
+    //videoSettings?: MediaStreamConstraints;
+
+    intervalTime?: number;
+
+    duplicateForgetTime?: number;
+
+    /**@ignore */
+    rememberFrameCount?:number;
+
+    /**@ignore */
+    trustFrameCount?:number;
+
+    whenToPlaySoundforSuccessfulRead?:string;
+
+    soundOnSuccessfullRead?:string;
+
+    whenToVibrateforSuccessfulRead?:string;
+
+    vibrateDuration?:number;
+
+    captureAndRecognizeInParallel?:boolean;
+
+    //onFrameRead?: (results: TextResult[]) => void;
+
+    //onUnduplicatedRead?: (txt: string, result: TextResult) => void;
+}

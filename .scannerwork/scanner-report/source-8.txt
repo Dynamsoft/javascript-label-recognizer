@@ -1,0 +1,31 @@
+/**
+* @enum DLRImagePreprocessingMode
+*
+* Describes the image preprocessing mode.
+*
+*/
+export enum EnumDLRImagePreprocessingMode {
+    /**Not supported yet. */
+	IPM_AUTO = 0x01,
+
+	/**Takes the unpreprocessed image for following operations. */
+	IPM_GENERAL = 0x02,
+
+	/**Preprocesses the image using the gray equalization algorithm. Check @ref IPM for available argument settings.*/
+	IPM_GRAY_EQUALIZE = 0x04,
+
+	/**Preprocesses the image using the gray smoothing algorithm. Check @ref IPM for available argument settings.*/
+	IPM_GRAY_SMOOTH = 0x08,
+
+	/**Preprocesses the image using the sharpening and smoothing algorithm. Check @ref IPM for available argument settings.*/
+	IPM_SHARPEN_SMOOTH = 0x10,
+
+	/**Preprocesses the image using the morphology algorithm. Check @ref IPM for available argument settings.*/
+	IPM_MORPHOLOGY = 0x20,
+
+	/**Reserved setting for image preprocessing mode.*/
+    IPM_REV = 0x80000000,
+
+    /**Skips image preprocessing. */
+	IPM_SKIP = 0x00
+}

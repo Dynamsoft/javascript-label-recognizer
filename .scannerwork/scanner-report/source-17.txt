@@ -1,0 +1,9 @@
+import { DLRQuadrilateral } from './dlrquadrilateral';
+import { DLRLineResult } from './dlrlineresult';
+export interface DLRResult{
+    //referenceRegionName: string;
+    //textAreaName: string;
+    location: DLRQuadrilateral;
+    confidence: number;
+    lineResults: DLRLineResult[];
+}
