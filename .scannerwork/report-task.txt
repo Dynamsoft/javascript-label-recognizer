@@ -1,6 +1,0 @@
-projectKey=dynamsoft-dlrjs-src
-serverUrl=http://192.168.3.186:9000
-serverVersion=9.3.0.51899
-dashboardUrl=http://192.168.3.186:9000/dashboard?id=dynamsoft-dlrjs-src
-ceTaskId=AYmMWsmy_nW45zWF7ffF
-ceTaskUrl=http://192.168.3.186:9000/api/ce/task?id=AYmMWsmy_nW45zWF7ffF
