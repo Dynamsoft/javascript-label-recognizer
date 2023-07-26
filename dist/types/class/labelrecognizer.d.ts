@@ -1,7 +1,6 @@
 /// <reference types="node" />
 import { DLRResult } from "../interface/dlrresult";
 import { DLRLineResult } from "../interface/dlrlineresult";
-import { DLRRuntimeSettings } from "../interface/dlrruntimesettings";
 import { EnumDLRImagePixelFormat } from "../enum/enumdlrimagepixelformat";
 import { LabelRecognizerException } from "../interface/labelrecognizerexception";
 import { ScanSettings } from '../interface/scanSettings';
@@ -44,12 +43,12 @@ export default class LabelRecognizer {
      * ```
      * For convenience, you can set `license` in `script` tag instead.
      * ```html
-     * <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.11/dist/dlr.js" data-license="LICENSE"></script>
+     * <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.30/dist/dlr.js" data-license="LICENSE"></script>
      * ```
      */
     static get license(): string;
     static set license(license: string);
-    static initLicense(keys: string): void;
+    static initLicense(license: string): void;
     private static _sessionPassword;
     /**
      * Specify a password to protect the `online key` from abuse.
@@ -82,7 +81,7 @@ export default class LabelRecognizer {
      * The SDK will try to automatically explore the engine location.
      * If the auto-explored engine location is not accurate, manually specify the engine location.
      * ```js
-     * Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.11/dist/";
+     * Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.30/dist/";
      * await Dynamsoft.DLR.LabelRecognizer.loadWasm();
      * ```
     */
@@ -100,19 +99,13 @@ export default class LabelRecognizer {
     /** @ignore */
     static set deviceFriendlyName(value: string);
     /** @ignore */
-    static _isShowRelRecognizeTimeInResults: boolean;
-    /** @ignore */
     static _onLog: (message: any) => void;
     /** @ignore */
     static _bWasmDebug: boolean;
     /** @ignore */
-    static _bNeverShowDialog: boolean;
-    /** @ignore */
     static _dlrWorker: Worker;
     private static _nextTaskID;
     private static _taskCallbackMap;
-    private static _loadWasmStatus;
-    private static _loadWasmCallbackArr;
     /**
      * Fire when resources start loading.
      * @see [[onResourcesLoadProgress]]
@@ -139,15 +132,10 @@ export default class LabelRecognizer {
      */
     static onResourcesLoaded: (resourcesPath?: string) => void;
     /** @ignore */
-    static isImageSource(value: any): boolean;
-    /** @ignore */
-    static isDSImage(value: any): boolean;
-    /** @ignore */
-    static isDCEFrame(value: any): boolean;
-    /** @ignore */
     _instanceID: number;
+    private oriCanvas?;
     /** @ignore */
-    private _ifSaveOriginalImageInACanvas;
+    private oriCanvasData?;
     /**
      * Whether to save the original image into canvas.
      * ```js
@@ -156,11 +144,9 @@ export default class LabelRecognizer {
      * document.body.append(recognizer.getOriginalImageInACanvas());
      * ```
      */
+    private _ifSaveOriginalImageInACanvas;
     get ifSaveOriginalImageInACanvas(): boolean;
     set ifSaveOriginalImageInACanvas(value: boolean);
-    private oriCanvas?;
-    /** @ignore */
-    private oriCanvasData?;
     /**
      * The original canvas.
      * ```js
@@ -180,10 +166,6 @@ export default class LabelRecognizer {
     _timeEnterInnerDLR: any;
     private recognizeRecords;
     private drawRegionsultRecords;
-    /**
-     * @ignore A callback when wasm download success in browser environment.
-     */
-    static _onWasmDownloaded: () => void;
     /**
      * Determine if the decoding module has been loaded successfully.
      * @category Initialize and Destroy
@@ -228,7 +210,7 @@ export default class LabelRecognizer {
      * The url of the default scanner UI.
      * Can only be changed before `createInstance`.
      * ```js
-     * Dynamsoft.DLR.LabelRecognizer.defaultUIElementURL = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.11/dist/dlr.ui.html";
+     * Dynamsoft.DLR.LabelRecognizer.defaultUIElementURL = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.30/dist/dlr.ui.html";
      * let pScanner = null;
      * (async()=>{
      *     let scanner = await (pScanner = pScanner || Dynamsoft.DLR.LabelRecognizer.createInstance());
@@ -243,6 +225,7 @@ export default class LabelRecognizer {
     private _intervalGetVideoFrame;
     private _loopReadVideoTimeoutId;
     private _vinResultArrayTimeoutId;
+    private _idCardUpperLine;
     /** @ignore */
     private array_getFrameTimeCost;
     /** @ignore */
@@ -253,21 +236,9 @@ export default class LabelRecognizer {
     private _intervalDetectVideoPause;
     protected captureAndRecognizeInParallel: boolean;
     /** @ignore */
-    _cvsDrawArea: HTMLCanvasElement;
-    /** @ignore */
-    _divScanArea: any;
-    /** @ignore */
-    _divScanLight: any;
-    /** @ignore */
-    _selCam: any;
-    /** @ignore */
-    _selRsl: any;
-    /** @ignore */
     _selMinLtr: any;
     /** @ignore */
     _optGotMinLtr: any;
-    /** @ignore */
-    _btnClose: any;
     private _minLetter;
     private _updateMinLtrSel;
     /** @ignore */
@@ -353,11 +324,6 @@ export default class LabelRecognizer {
      * @category UI
      */
     highlightStrokeStyle: string;
-    /**
-     * @category UI
-     */
-    highlightLineWidth: number;
-    private beingLazyDrawRegionsults;
     private _vinResultArray;
     private currentSettingsTemplate;
     private _dce;
@@ -375,11 +341,9 @@ export default class LabelRecognizer {
     set maxCvsSideLength(value: number);
     get maxCvsSideLength(): number;
     private presetVideoTemplateRegion;
-    private isPresetRegion;
     private _registerDCEControler;
     private _logoutDCEControler;
     setImageSource(imgSource: ImageSource | CameraEnhancer, options?: any): Promise<void>;
-    private static _loadWasmErr;
     /**
      * Manually load and compile the decoding module. Used for preloading to avoid taking too long for lazy loading.
      * @category Initialize and Destroy
@@ -394,12 +358,12 @@ export default class LabelRecognizer {
     private static createInstanceInWorker;
     private constructor();
     /**
-     * Create a `LabelRecognizer` object.
-     * ```
-     * let recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance();
-     * ```
-      * @category Initialize and Destroy
-     */
+    * Create a `LabelRecognizer` object.
+    * ```
+    * let recognizer = await Dynamsoft.DLR.LabelRecognizer.createInstance();
+    * ```
+     * @category Initialize and Destroy
+    */
     static createInstance(config?: any): Promise<LabelRecognizer>;
     /**
      * The main recognizing method can accept a variety of data types, including binary data, images, base64(with mime), urls, etc.
@@ -445,10 +409,26 @@ export default class LabelRecognizer {
      */
     recognizeUrl(url: string, modelName?: string): Promise<DLRResult[]>;
     /**
+     * Recognize from raw buffer.
+     * @param buffer
+     * @param width
+     * @param height
+     * @param stride
+     * @param format
+     * @param config
+     * @category Recognize
+     */
+    recognizeBuffer(buffer: Uint8Array | Uint8ClampedArray | ArrayBuffer | Blob | Buffer, width: number, height: number, stride: number, format: EnumDLRImagePixelFormat, config?: any): Promise<DLRResult[]>;
+    private _filterResult;
+    private _filterMrzResult;
+    private _filterVinResult;
+    private _verifyCheckDigit;
+    private _getMrzType;
+    /**
      * Recognize from the memory buffer containing image pixels in defined format.
      * @ignore
      */
-    _recognizeBuffer_Uint8Array(buffer: Uint8Array | Uint8ClampedArray, width: number, height: number, stride: number, format: EnumDLRImagePixelFormat, config?: any): Promise<any>;
+    _recognizeBuffer_Uint8Array(buffer: Uint8Array | Uint8ClampedArray, width: number, height: number, stride: number, format: EnumDLRImagePixelFormat, config?: any): Promise<DLRResult[]>;
     /**
      *
      * @param buffer
@@ -459,55 +439,46 @@ export default class LabelRecognizer {
      * @param config
      * @ignore
      */
-    _recognizeBuffer_Blob(buffer: Blob, width: number, height: number, stride: number, format: EnumDLRImagePixelFormat, config?: any): Promise<any>;
-    /**
-     * Recognize from raw buffer.
-     * @param buffer
-     * @param width
-     * @param height
-     * @param stride
-     * @param format
-     * @param config
-     * @category Recognize
-     */
-    recognizeBuffer(buffer: Uint8Array | Uint8ClampedArray | ArrayBuffer | Blob | Buffer, width: number, height: number, stride: number, format: EnumDLRImagePixelFormat, config?: any): Promise<any>;
-    /**
-     * Filter VIN code results by confidence
-     */
-    _filterVinResults(results: any): void;
-    _filterMrzResults(results: any): any;
+    _recognizeBuffer_Blob(buffer: Blob, width: number, height: number, stride: number, format: EnumDLRImagePixelFormat, config?: any): Promise<DLRResult[]>;
     /** @ignore */
-    _recognizeFileInMemory_Uint8Array(bytes: Uint8Array, config?: any): Promise<any>;
+    _recognizeFileInMemory_Uint8Array(bytes: Uint8Array, config?: any): Promise<DLRResult[]>;
+    private _recognize_Blob;
     /**
-     * Gets current settings and save it into a struct.
-     * ```js
-     * let settings = await recognizer.getRuntimeSettings();
-     * settings.referenceRegion.location.points = [{x: 0,y: 40},{x: 100,y: 40},{x: 100,y: 60},{x: 0,y: 60}];
-     * await recognizer.updateRuntimeSettings(settings);
-     * ```
-     * @see [updateRuntimeSettings]()
-     * @category Runtime Settings
-     */
-    getRuntimeSettings(): Promise<DLRRuntimeSettings>;
-    private static isRegionNormalPreset;
-    /**
-     * Update runtime settings with a given struct, or a string of
-     * `numberLetter`, `number`, `letter`, `numberUppercase`, `cppdefault`, `VIN`, `VIN_NA`, `passportMRZ`, `visaMRZ`, `MRZ`
-     * `video-numberLetter`, `video-number`, `video-letter`, `video-numberUppercase`, `video-cppdefault`, `video-VIN`, `video-VIN_NA`, `video-passportMRZ`, `video-visaMRZ`, `video-MRZ`
-     * to use preset settings for LabelRecognizer.
-     * The default settings for LabelRecognizer is `cppdefault`.
-     * ```js
-     * let settings = await recognizer.getRuntimeSettings();
-     * settings.referenceRegion.location.points = [{x: 0,y: 40},{x: 100,y: 40},{x: 100,y: 60},{x: 0,y: 60}];
-     * await recognizer.updateRuntimeSettings(settings);
-     * ```
-     * ```js
-     * await scanner.updateRuntimeSettings('numberLetter');
-     * ```
-     * @category Runtime Settings
+     *
+     * @param arrayBuffer
+     * @param config
      * @ignore
      */
-    updateRuntimeSettings(settings: DLRRuntimeSettings | string): Promise<void>;
+    private _recognize_ArrayBuffer;
+    /**
+     *
+     * @param uint8Array
+     * @param config
+     * @ignore
+     */
+    private _recognize_Uint8Array;
+    /**
+     *
+     * @param image
+     * @param config
+     * @ignore
+     */
+    private _recognize_Image;
+    private _recognize_Canvas;
+    /**
+     * recognize video is not multi call safe in an instance, we reuse many thing for speed, so make sure wait util one finish then call next
+     * @param video
+     * @param config
+     * @ignore
+     */
+    _recognize_Video(video: HTMLVideoElement, config?: any): Promise<DLRResult[]>;
+    /**@ignore */
+    _recognize_DCEFrame(dceFrame: DCEFrame, config?: any): Promise<DLRResult[]>;
+    /**@ignore */
+    _recognize_DSImage(dsImage: DSImage, config?: any): Promise<DLRResult[]>;
+    private _recognize_Base64;
+    private _recognize_Url;
+    private _recognize_FilePath;
     /**
      * Resets all parameters to default values.
      * ```js
@@ -536,7 +507,7 @@ export default class LabelRecognizer {
      * ```
      * @category Runtime Settings
      */
-    updateRuntimeSettingsFromString(settings: any): Promise<void>;
+    updateRuntimeSettingsFromString(settings: any, bKeepTemplate?: Boolean): Promise<void>;
     /**
      * Gets current settings and save it into a json.
      * ```js
@@ -581,78 +552,12 @@ export default class LabelRecognizer {
      * @category Runtime Settings
      */
     static eraseAllCaffeModels(): Promise<void>;
-    private _recognize_Blob;
-    /**
-     *
-     * @param arrayBuffer
-     * @param config
-     * @ignore
-     */
-    private _recognize_ArrayBuffer;
-    /**
-     *
-     * @param uint8Array
-     * @param config
-     * @ignore
-     */
-    private _recognize_Uint8Array;
-    /**
-     *
-     * @param image
-     * @param config
-     * @ignore
-     */
-    private _recognize_Image;
-    private _recognize_Canvas;
-    /**
-     * recognize video is not multi call safe in an instance, we reuse many thing for speed, so make sure wait util one finish then call next
-     * @param video
-     * @param config
-     * @ignore
-     */
-    _recognize_Video(video: HTMLVideoElement, config?: any): Promise<DLRResult[]>;
-    /**@ignore */
-    _recognize_DCEFrame(dceFrame: DCEFrame, config?: any): Promise<DLRResult[]>;
-    /**@ignore */
-    _recognize_DSImage(dsImage: DSImage, config?: any): Promise<DLRResult[]>;
-    private _recognize_Base64;
-    private _recognize_Url;
-    private _recognize_FilePath;
     /** @ignore */
     static LabelRecognizerException(ag0: any, ag1: any): LabelRecognizerException;
     private _handleRetJsonString;
-    /**
-     * Sets the optional argument for a specified mode in Modes parameters.
-     * ```js
-     * await recognizer.setModeArgument("BinarizationModes", 0, "EnableFillBinaryVacancy", "1");
-     * ```
-     * @param modeName
-     * @param index
-     * @param argumentName
-     * @param argumentValue
-     * @category Runtime Settings
-     */
-    setModeArgument(modeName: string, index: number, argumentName: string, argumentValue: string): Promise<void>;
-    /**
-     * Gets the optional argument for a specified mode in Modes parameters.
-     * ```js
-     * let argumentValue = await recognizer.getModeArgument("BinarizationModes", 0, "EnableFillBinaryVacancy");
-     * ```
-     * @param modeName
-     * @param index
-     * @param argumentName
-     * @category Runtime Settings
-     */
-    getModeArgument(modeName: string, index: number, argumentName: string): Promise<string>;
     private clearMapDecodeRecord;
     /** @ignore */
-    _onCameraSelChange: () => void;
-    /** @ignore */
-    _onResolutionSelChange: () => void;
-    /** @ignore */
     _onMinLetterSelChange: (ev: Event) => Promise<void>;
-    /** @ignore */
-    _onCloseBtnClick: () => void;
     /** @ignore */
     _bindUI(): void;
     /** @ignore */
@@ -710,6 +615,7 @@ export default class LabelRecognizer {
     _cloneDecodeResults(results: any): any;
     /** @ignore */
     private _loopReadVideo;
+    private _filterVideoModeMrzResult;
     /**
      * start dce fetching frame loop, and get frame from frame queue
      * @ignore
@@ -733,7 +639,19 @@ export default class LabelRecognizer {
      * @ignore
      */
     private _checkValidMRV;
-    private _tempSolutionStatus;
+    /**
+     * check if the two row or third row of id card mrz code is valid.
+     * check digit only exits in two row or third row in id card mrz.
+     * @ignore
+     */
+    private _checkValidIDCard;
+    /**
+     * _promiseStartScan.status == "pending"; // camera is openning.
+     * _promiseStartScan.status == "fulfilled"; // camera is opened.
+     * _promiseStartScan == null; // camera is closed.
+     * @ignore
+     */
+    private _promiseStartScan;
     /**
      * Bind UI, open the camera, start recognizing.
      * ```js

@@ -28,7 +28,10 @@ __pycache__
 ==*
 package-lock.json
 yarn.lock
+sonar-project.properties
+.npmrc
 .git
+log.txt
 /*.zip
 /*.py
 /*.exe
@@ -48,6 +51,8 @@ yarn.lock
 /public
 /original_model_files
 /dce
+/.scannerwork
+/js_scanreport
 /README.html
 
 !bower.json

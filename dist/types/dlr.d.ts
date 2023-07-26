@@ -8,5 +8,6 @@ import { DLRResult } from "./interface/dlrresult";
 import { DLRLineResult } from "./interface/dlrlineresult";
 import { ImageSource } from "./interface/imagesource";
 import { DSImage } from "./interface/dsimage";
-export { LabelRecognizer, EnumDLRErrorCode, EnumDLRGrayscaleTransformationMode, EnumDLRImagePixelFormat, EnumDLRRegionPredetectionMode, ScanSettings, DLRResult, DLRLineResult, ImageSource, DSImage };
+import { isImageSource, isDSImage, isDCEFrame } from "./utils";
+export { LabelRecognizer, EnumDLRErrorCode, EnumDLRGrayscaleTransformationMode, EnumDLRImagePixelFormat, EnumDLRRegionPredetectionMode, ScanSettings, DLRResult, DLRLineResult, ImageSource, DSImage, isImageSource, isDSImage, isDCEFrame };
 //# sourceMappingURL=dlr.d.ts.map
