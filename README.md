@@ -1,4 +1,3 @@
-<!--The original doc is hosted here => https://github.com/dynamsoft-docs/label-recognition-docs/blob/master/programming/javascript/user-guide.md -->
 # Dynamsoft Label Recognizer for Your Website
 
 Add the capability of reading passport MRZs, ID cards, VIN numbers, and various other fixed text fields in your web application with just a few lines of code.
@@ -43,8 +42,8 @@ The complete code of the "MRZ Reading" example is shown below
 
 <head>
     <title>MRZ Reading</title>
-    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.30/dist/dlr.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@3.2.0/dist/dce.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.31/dist/dlr.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@3.3.5/dist/dce.js"></script>
 </head>
 
 <body>
@@ -173,15 +172,15 @@ The simplest way to include the SDK is to use either the [jsDelivr](https://jsde
 * jsDelivr
 
   ```html
-  <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.30/dist/dlr.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@3.2.0/dist/dce.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.31/dist/dlr.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@3.3.5/dist/dce.js"></script>
   ```
 
 * UNPKG  
 
   ```html
-  <script src="https://unpkg.com/dynamsoft-label-recognizer@2.2.30/dist/dlr.js"></script>
-  <script src="https://unpkg.com/dynamsoft-camera-enhancer@3.2.0/dist/dce.js"></script>
+  <script src="https://unpkg.com/dynamsoft-label-recognizer@2.2.31/dist/dlr.js"></script>
+  <script src="https://unpkg.com/dynamsoft-camera-enhancer@3.3.5/dist/dce.js"></script>
   ```
 
 #### Host the SDK yourself
@@ -193,22 +192,22 @@ To download the SDK:
 * yarn
 
   ```cmd
-  yarn add dynamsoft-label-recognizer@2.2.30
-  yarn add dynamsoft-camera-enhancer@3.2.0
+  yarn add dynamsoft-label-recognizer@2.2.31
+  yarn add dynamsoft-camera-enhancer@3.3.5
   ```
 
 * npm
 
   ```cmd
-  npm install dynamsoft-label-recognizer@2.2.30
-  npm install dynamsoft-camera-enhancer@3.2.0
+  npm install dynamsoft-label-recognizer@2.2.31
+  npm install dynamsoft-camera-enhancer@3.3.5
   ```
 
 Depending on how you downloaded the SDK and where you put it, you can typically include it like this:
 
   ```html
-  <script src="/dynamsoft-label-recognizer-js-2.2.30/dist/dlr.js"></script>
-  <script src="/dynamsoft-label-recognizer-js-2.2.30/dce/dist/dce.js"></script>
+  <script src="/dynamsoft-label-recognizer-js-2.2.31/dist/dlr.js"></script>
+  <script src="/dynamsoft-label-recognizer-js-2.2.31/dce/dist/dce.js"></script>
   ```
 
 or
@@ -245,8 +244,8 @@ If the engine files (\*.worker.js, \*.wasm.js and \*.wasm, etc.) are not in the 
 
 ```javascript
 // The following code uses the jsDelivr CDN, feel free to change it to your own location of these files.
-Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.30/dist/";
-Dynamsoft.DCE.CameraEnhancer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@3.2.0/dist/";
+Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.31/dist/";
+Dynamsoft.DCE.CameraEnhancer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-camera-enhancer@3.3.5/dist/";
 ```
 
 **This configuration is usually required with frameworks like Angular or React where dlr.js is compiled into another file.**
@@ -301,7 +300,7 @@ await recognizer.setImageSource(cameraEnhancer, options);
 
 #### Change the camera settings if necessary
 
-In some cases, a different camera might be required instead of the default one. Also, a different resolution might work better. To change the camera or the resolution, we use the `CameraEnhancer` object. Learn more [here](https://www.dynamsoft.com/camera-enhancer/docs/programming/javascript/api-reference/camera-control.html?ver=3.2.0&utm_source=github&product=dlr&package=js).
+In some cases, a different camera might be required instead of the default one. Also, a different resolution might work better. To change the camera or the resolution, we use the `CameraEnhancer` object. Learn more [here](https://www.dynamsoft.com/camera-enhancer/docs/programming/javascript/api-reference/camera-control.html?ver=3.3.5&utm_source=github&product=dlr&package=js).
 
 ```javascript
 // The following lines set which camera and what resolution to use.
@@ -450,7 +449,7 @@ await recognizer.startScanning(true);
 ## API Documentation
 
 You can check out the detailed documentation about the APIs of the SDK at
-[https://www.dynamsoft.com/label-recognition/docs/programming/javascript/api-reference/?ver=2.2.30&utm_source=github&product=dlr&package=js](https://www.dynamsoft.com/label-recognition/docs/programming/javascript/api-reference/?ver=2.2.30&utm_source=github&product=dlr&package=js).
+[https://www.dynamsoft.com/label-recognition/docs/programming/javascript/api-reference/?ver=2.2.31&utm_source=github&product=dlr&package=js](https://www.dynamsoft.com/label-recognition/docs/programming/javascript/api-reference/?ver=2.2.31&utm_source=github&product=dlr&package=js).
 
 ## System Requirements
 
@@ -484,13 +483,13 @@ The following table is a list of supported browsers based on the above requireme
   Chrome | v61+<sup>1</sup>
   Firefox | v52+ (v55+ on Android/iOS<sup>1</sup>)
   Edge<sup>2</sup> | v16+
-  Safari<sup>3</sup> | v11+
+  Safari | v13+
 
   <sup>1</sup> iOS 14.3+ is required for camera video streaming in Chrome and Firefox or Apps using webviews.
 
   <sup>2</sup> On Edge, due to strict Same-origin policy, you must host the SDK files on the same domain as your web page.
-  
-  <sup>3</sup> Safari v11.x already has the required features, but it has many other issues, so we recommend v12+.
+
+  > Note: iOS 12 is currently not compatible with Dynamsoft Label Recognizer v 2.2.30+, due to certain technical limitations.
 
 Apart from the browsers, the operating systems may impose some limitations of their own that could restrict the use of the SDK. Browser compatibility ultimately depends on whether the browser on that particular operating system supports the features listed above.
 

@@ -43,7 +43,7 @@ export default class LabelRecognizer {
      * ```
      * For convenience, you can set `license` in `script` tag instead.
      * ```html
-     * <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.30/dist/dlr.js" data-license="LICENSE"></script>
+     * <script src="https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer/dist/dlr.js" data-license="LICENSE"></script>
      * ```
      */
     static get license(): string;
@@ -81,7 +81,7 @@ export default class LabelRecognizer {
      * The SDK will try to automatically explore the engine location.
      * If the auto-explored engine location is not accurate, manually specify the engine location.
      * ```js
-     * Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.30/dist/";
+     * Dynamsoft.DLR.LabelRecognizer.engineResourcePath = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer/dist/";
      * await Dynamsoft.DLR.LabelRecognizer.loadWasm();
      * ```
     */
@@ -210,7 +210,7 @@ export default class LabelRecognizer {
      * The url of the default scanner UI.
      * Can only be changed before `createInstance`.
      * ```js
-     * Dynamsoft.DLR.LabelRecognizer.defaultUIElementURL = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer@2.2.30/dist/dlr.ui.html";
+     * Dynamsoft.DLR.LabelRecognizer.defaultUIElementURL = "https://cdn.jsdelivr.net/npm/dynamsoft-label-recognizer/dist/dlr.ui.html";
      * let pScanner = null;
      * (async()=>{
      *     let scanner = await (pScanner = pScanner || Dynamsoft.DLR.LabelRecognizer.createInstance());
