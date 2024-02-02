@@ -21,6 +21,7 @@ yarn-error.log*
 *.sln
 *.sw?
 *.map
+*.properties
 
 __pycache__
 ~~*
@@ -28,10 +29,8 @@ __pycache__
 ==*
 package-lock.json
 yarn.lock
-sonar-project.properties
 .npmrc
 .git
-log.txt
 /*.zip
 /*.py
 /*.exe
@@ -48,11 +47,10 @@ log.txt
 /Web.config
 /samples
 /temp
+/templates
 /public
 /original_model_files
 /dce
-/.scannerwork
-/js_scanreport
 /README.html
 
 !bower.json

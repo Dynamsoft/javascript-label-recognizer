@@ -1,39 +1,40 @@
 {
   "name": "dynamsoft-label-recognizer",
-  "version": "2.2.31",
+  "version": "3.0.30",
   "description": "Dynamsoft Label Recognizer (DLR) is an SDK designed to recognize meaningful zonal text or symbols in an image (Label). Common scenarios include price tags in supermarkets, inventory labels in warehouses, VIN codes on car windshields, driver licenses, passports, visas, ID cards, etc.",
   "files": [
     "/dist/*.js",
     "/dist/*.mjs",
     "/dist/*.html",
     "/dist/*.wasm",
-    "/dist/**/*.d.ts",
-    "/dist/**/*.data",
-    "/Api Reference.url",
-    "/legal.txt",
-    "/samples.url"
+    "/dist/*.json",
+    "/dist/types/**",
+    "LEGAL.txt",
+    "API Reference.url",
+    "samples.url"
   ],
   "homepage": "https://www.dynamsoft.com/label-recognition/programming/javascript/?ver=latest",
   "main": "./dist/dlr.js",
   "module": "./dist/dlr.esm.js",
   "exports": {
-    "import": {
-      "types": "./dist/types/dlr.d.ts",
-      "default": "./dist/dlr.esm.js"
-    },
-    "require": {
-      "types": "./dist/types/dlr.d.ts",
-      "default": "./dist/dlr.js"
+    ".": {
+      "types": {
+        "require": "./dist/types/dlr.d.cts",
+        "import": "./dist/types/dlr.d.ts"
+      },
+      "import": "./dist/dlr.esm.js",
+      "require": "./dist/dlr.js"
     }
   },
-  "sideEffects": false,
-  "types": "./dist/types/dlr.d.ts",
+  "sideEffects": true,
+  "types": "dist/types/dlr.d.ts",
   "author": {
     "name": "Dynamsoft",
     "url": "https://www.dynamsoft.com"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "tag": "latest"
   },
   "license": "SEE LICENSE IN LICENSE",
   "repository": {
@@ -59,44 +60,37 @@
     "web"
   ],
   "scripts": {
-    "build-dev": "rollup -c --environment BUILD:development",
     "build": "rollup -c --environment BUILD:production",
-    "update:readme": "node ./updateReadme.js"
+    "update:readme": "updateReadme --package=dynamsoft-label-recognizer --version=latest --html",
+    "update:prod": "updatePackage --package=dynamsoft-label-recognizer --version=auto --env=production --tag=latest",
+    "update:beta": "updatePackage --package=dynamsoft-label-recognizer --version=auto --env=beta --tag=beta",
+    "update:iv": "updatePackage --package=dynamsoft-label-recognizer --version=auto --env=internalVersion --tag=iv",
+    "update:dev": "updatePackage --package=dynamsoft-label-recognizer --version=auto --env=development --tag=latest",
+    "updateLink:npm": "updateLink --source=npm",
+    "updateLink:zip": "updateLink --source=zip",
+    "updateLink:github": "updateLink --source=github",
+    "updateCore:prod": "updateImportedPkg --package=dynamsoft-core --no-dev",
+    "updateCore:dev": "updateImportedPkg --package=dynamsoft-core --dev",
+    "updateCvr:prod": "updateImportedPkg --package=dynamsoft-capture-vision-router --no-dev",
+    "makeZip": "makeZip --package=dynamsoft-label-recognizer --version=auto --sampleBranch=_dev --structure=new --otherPkgs=dynamsoft-capture-vision-std dynamsoft-image-processing dynamsoft-core dynamsoft-license dynamsoft-capture-vision-router dynamsoft-utility",
+    "makeZip_dev": "makeZip --package=dynamsoft-label-recognizer --version=auto --sampleBranch=_dev --structure=new --otherPkgs=@dynamsoft/dynamsoft-capture-vision-std @dynamsoft/dynamsoft-image-processing @dynamsoft/dynamsoft-core @dynamsoft/dynamsoft-license @dynamsoft/dynamsoft-capture-vision-router @dynamsoft/dynamsoft-utility",
+    "easyPublish": "npm run update:dev && npm i @dynamsoft/dynamsoft-core@latest && npm run build && npm publish",
+    "ep-no-core": "npm run update:dev && npm run build && npm publish"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "13.0.5",
-    "@rollup/plugin-replace": "3.0.0",
-    "@rollup/plugin-typescript": "8.3.0",
-    "@types/node": "16.11.2",
-    "@types/node-fetch": "2.6.1",
-    "@types/node-localstorage": "1.3.0",
-    "detect-browser-node-ssr": "^2.0.0",
-    "@scannerproxy/browser-info": "^1.0.7",
-    "@scannerproxy/curscript-path": "^1.0.3",
-    "@scannerproxy/dlsjs": "^2.0.9",
-    "fs-extra": "8.1.0",
-    "highlight.js": "^9.15.6",
-    "mutable-promise": "1.1.13",
-    "rollup": "2.58.0",
-    "rollup-plugin-terser": "7.0.2",
-    "showdown": "^1.9.0",
-    "tslib": "2.3.1",
-    "typescript": "4.3.5"
-  },
-  "peerDependencies": {
-    "node-fetch": "^2.6.1",
-    "node-localstorage": "^2.1.6"
-  },
-  "peerDependenciesMeta": {
-    "node-fetch": {
-      "optional": true
-    },
-    "node-localstorage": {
-      "optional": true
-    }
+    "@dynamsoft/rd2-scripts": "^0.1.14",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-replace": "^5.0.2",
+    "@rollup/plugin-terser": "^0.4.3",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@scannerproxy/curscript-path": "^2.0.1",
+    "@types/node": "^20.7.1",
+    "dynamsoft-capture-vision-router": "^2.0.30",
+    "rollup": "^2.79.1",
+    "tslib": "^2.6.2",
+    "typescript": "^4.9.5"
   },
   "dependencies": {
-    "dm-howler": "^2.2.4",
-    "dynamsoft-camera-enhancer": "^3.0.0"
+    "dynamsoft-core": "^3.0.31"
   }
 }

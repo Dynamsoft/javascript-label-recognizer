@@ -1,11 +1,10 @@
-import { DLRQuadrilateral } from './dlrquadrilateral';
-export interface DLRCharacterResult {
+import { Quadrilateral } from "dynamsoft-core";
+export interface CharacterResult {
     characterH: string;
     characterM: string;
     characterL: string;
-    location: DLRQuadrilateral;
     characterHConfidence: number;
     characterMConfidence: number;
     characterLConfidence: number;
+    location: Quadrilateral;
 }
-//# sourceMappingURL=dlrcharacterresult.d.ts.map
